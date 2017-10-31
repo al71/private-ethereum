@@ -29,11 +29,117 @@ source ~/.bashrc
   "makers": ["0xca843569e3427144cead5e4d5999a3d0ccf92b8e"]
 }
 
-Как создать адреса???? Открытый вопрос - см далее
+Как создать адреса???? Открытый вопрос - см далее "алгоритм"
 6) запускаете $>node index.js
 7) получаете файл quorum-genesis.json
 
 ---
+
+https://github.com/synechron-finlabs/quorum-maker/blob/development/lib/setup_multibox.sh
+
+Как создаются адреса:
+blockMakerAddress="$(geth --datadir ${pName}/datadir --password lib/passwords.txt account new)"
+
+итого алгоритм (ЭТОТ АЛГОРИТМ РАБОТАЕТ ЕСЛИ node1 это maker - для примера 7node это не так, но для такого случая не простого механизма генерации genesis):
+
+1) createBootnode = 
+те bootnode -genkey bootnode.key 2> enode.txt & 
+получить bootnodeEnode и bootnodeHex
+2) генерировать ноды:
+   2.1) генерировать public and private keys для ноды constellation-node --generatekeys=
+   2.2) сгенерировать шаблон конфига ноды (фактически для всех нод кроме ноды1 надо поставить otherNodeUrls=http://#MAIN_NODE_IP#:#M_C_PORT#) - остальное одинаково
+   2.2) генерировать blockmaker (если он один поставить флаг singleblockmaker в будущую cтроку запуска ноды) и не генерировать blockmaker больше:
+   фактически выполнить blockMakerAddress="$(geth --datadir ${pName}/datadir --password lib/passwords.txt account new)"
+   получить адрес и ключ!!!
+   mv ${pName}/datadir/keystore/* ${pName}/keys/${nodeName}BM
+   2.3) генерировать voters:
+   voterAddress="$(geth --datadir ${pName}/datadir --password lib/passwords.txt account new)"
+   mv ${pName}/datadir/keystore/* ${pName}/keys/${nodeName}V 
+   повторять
+
+ubuntu@quorum1:~/workspace/quorum-maker$ ls -al 11111/keys/
+total 72
+drwxrwxr-x 2 ubuntu ubuntu 4096 Oct 31 12:48 .
+drwxrwxr-x 8 ubuntu ubuntu 4096 Oct 31 12:48 ..
+-rw-rw-r-- 1 ubuntu ubuntu   83 Oct 31 12:45 node1a.key
+-rw-rw-r-- 1 ubuntu ubuntu   44 Oct 31 12:45 node1a.pub
+-rw------- 1 ubuntu ubuntu  491 Oct 31 12:46 node1BM
+-rw-rw-r-- 1 ubuntu ubuntu   83 Oct 31 12:45 node1.key
+-rw-rw-r-- 1 ubuntu ubuntu   44 Oct 31 12:45 node1.pub
+-rw------- 1 ubuntu ubuntu  491 Oct 31 12:47 node1V
+-rw-rw-r-- 1 ubuntu ubuntu   83 Oct 31 12:47 node2a.key
+-rw-rw-r-- 1 ubuntu ubuntu   44 Oct 31 12:47 node2a.pub
+-rw-rw-r-- 1 ubuntu ubuntu   83 Oct 31 12:47 node2.key
+-rw-rw-r-- 1 ubuntu ubuntu   44 Oct 31 12:47 node2.pub
+-rw------- 1 ubuntu ubuntu  491 Oct 31 12:48 node2V
+-rw-rw-r-- 1 ubuntu ubuntu   83 Oct 31 12:48 node3a.key
+-rw-rw-r-- 1 ubuntu ubuntu   44 Oct 31 12:48 node3a.pub
+-rw-rw-r-- 1 ubuntu ubuntu   83 Oct 31 12:48 node3.key
+-rw-rw-r-- 1 ubuntu ubuntu   44 Oct 31 12:48 node3.pub
+-rw------- 1 ubuntu ubuntu  491 Oct 31 12:48 node3V
+      
+3) сгенерировать генезис.json на основе нод (в genesis нужны makers, voters)
+4) теперь в каждой фактической ноде (там должен стоять geth от JP Morgan) создать правильную структуру каталогов
+echo "[*] Cleaning up temporary data directories"
+rm -rf qdata
+mkdir -p qdata/logs
+echo "[*] Configuring node 1"
+mkdir -p qdata/dd1/keystore
+5) перенести туда ключи для этой ноды см п 2.2 (или 2.3)
+cp keys/key1 qdata/dd1/keystore
+6) сгенерировать базу данных для каждой ноды на основе генезис блока
+geth --datadir qdata/dd2 init genesis.json
+одинаковая операция для любой ноды
+7) запустить bootnode c BOOTNODE_KEYHEX - наверное их может быть не одна на сеть (не разобрался как это связано с genesis) 
+8) запустить каждую ноду constellation-node с конфигом tm{1-N}.conf где будут его публичные и приватные ключи
+
+пример конфига первой ноды:
+cat tm1.conf 
+url = "http://127.0.0.1:9000/"
+port = 9000
+socketPath = "qdata/tm1.ipc"
+otherNodeUrls = []
+publicKeyPath = "keys/tm1.pub"
+privateKeyPath = "keys/tm1.key"
+archivalPublicKeyPath = "keys/tm1a.pub"
+archivalPrivateKeyPath = "keys/tm1a.key"
+storagePath = "qdata/constellation1"
+
+пример конфига второй ноды:
+url = "http://127.0.0.1:9001/"
+port = 9001
+socketPath = "qdata/tm2.ipc"
+otherNodeUrls = ["http://127.0.0.1:9000/"]
+publicKeyPath = "keys/tm2.pub"
+privateKeyPath = "keys/tm2.key"
+archivalPublicKeyPath = "keys/tm2a.pub"
+archivalPrivateKeyPath = "keys/tm2a.key"
+storagePath = "qdata/constellation2"
+
+9) запустить каждую ноду geth с конфигом tm{1-N}.conf где будут ее публичные и приватные ключи и в параметрах geth указан --bootnodes $BOOTNODE_ENODE
+
+пример конфига первой ноды:
+$ cat tm1.conf 
+url = "http://127.0.0.1:9000/"
+port = 9000
+socketPath = "qdata/tm1.ipc"
+otherNodeUrls = []
+publicKeyPath = "keys/tm1.pub"
+privateKeyPath = "keys/tm1.key"
+archivalPublicKeyPath = "keys/tm1a.pub"
+archivalPrivateKeyPath = "keys/tm1a.key"
+storagePath = "qdata/constellation1"
+
+пример конфига второй ноды:
+url = "http://127.0.0.1:9001/"
+port = 9001
+socketPath = "qdata/tm2.ipc"
+otherNodeUrls = ["http://127.0.0.1:9000/"]
+publicKeyPath = "keys/tm2.pub"
+privateKeyPath = "keys/tm2.key"
+archivalPublicKeyPath = "keys/tm2a.pub"
+archivalPrivateKeyPath = "keys/tm2a.key"
+storagePath = "qdata/constellation2"
 
 
 
