@@ -1,0 +1,27 @@
+ethereum private network https://github.com/ethereum/go-ethereum/wiki/Private-network
+bootnodes в public geth клиенте https://github.com/ethereum/go-ethereum/blob/master/params/bootnodes.go
+
+Как сделать quorum-genesis.json
+1) У вас должен быть установлен свежий node.js = это справедливо если вы уже установили quorum 
+https://github.com/ConsenSys/QuorumNetworkManager
+
+2) Скачивайте git clone https://github.com/davebryson/quorum-genesis
+3) cd quorum-genesis
+4) sudo npm install -g
+5) находясь в каталоге quorum-genesis создайте там файл quorum-config.json
+{
+  "threshold": 3,
+  "voters": [
+    "0x0fbdc686b912d7722dc86510934589e0aaf3b55a",
+    "0x9186eb3d20cbd1f5f992a950d808c4495153abd5",
+    "0x0638e1574728b6d862dd5d3a3e0942c3be47d996"
+  ],
+  "makers": ["0xca843569e3427144cead5e4d5999a3d0ccf92b8e"]
+}
+
+Как создать адреса???? Открытый вопрос - см далее
+6) запускаете $>node index.js
+7) получаете файл quorum-genesis.json
+
+---
+
