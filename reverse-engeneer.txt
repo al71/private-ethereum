@@ -65,6 +65,8 @@ instance: Geth/v1.5.0-unstable-949b5c0d/linux/go1.7
 > 
 
 -----------------------------
+https://medium.com/taipei-ethereum-meetup/beginners-guide-to-ethereum-3-explain-the-genesis-file-and-use-it-to-customize-your-blockchain-552eb6265145
+
 ubuntu@quorum1:~/workspace/quorum-examples/examples/7nodes$ cat genesis.json 
 {
   "alloc": {
@@ -139,4 +141,8 @@ c точки зрения constellation-node:
 node1 tm1.conf otherNodeUrls = []
 node2-7 tm2-7.conf otherNodeUrls = ["http://127.0.0.1:9000/"]
 
+вопрос можно ли их сделать больше 1й?
+
 ----------------------------------
+
+storage в 
