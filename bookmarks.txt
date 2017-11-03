@@ -1,5 +1,7 @@
 ethereum private network https://github.com/ethereum/go-ethereum/wiki/Private-network
 bootnodes в public geth клиенте https://github.com/ethereum/go-ethereum/blob/master/params/bootnodes.go
+https://github.com/ethereum/go-ethereum/issues/14831
+http://gavwood.com/paper.pdf
 
 Все ниже тестировалось на Ubuntu 16.04 LTS
 
