@@ -62,7 +62,37 @@ instance: Geth/v1.5.0-unstable-949b5c0d/linux/go1.7
 
 > eth.accounts
 []
-> 
+>
+
+роли ethereum node при старте
+echo "[*] Starting node 1"
+PRIVATE_CONFIG=tm1.conf nohup geth --datadir qdata/dd1 $GLOBAL_ARGS --rpcport 22000 --port 21000 --unlock 0 --password passwords.txt 2>>qdata/logs/1.log &
+
+echo "[*] Starting node 2"
+PRIVATE_CONFIG=tm2.conf nohup geth --datadir qdata/dd2 $GLOBAL_ARGS --rpcport 22001 --port 21001 --voteaccount "0x0fbdc686b912d7722dc86510934589e0aaf3b55a" --votepassword "" --blockmakeraccount "0xca843569e3427144cead5e4d5999a3d0ccf92b8e" --blockmakerpassword "" --singleblockmaker --minblocktime 2 --maxblocktime 5 2>>qdata/logs/2.log &
+
+=> node2 --voteaccount "0x0fbdc686b912d7722dc86510934589e0aaf3b55a" - --- это node2 2th account
+   node2 --blockmakeraccount "0xca843569e3427144cead5e4d5999a3d0ccf92b8e" --- это node2 1th account
+
+echo "[*] Starting node 3"
+PRIVATE_CONFIG=tm3.conf nohup geth --datadir qdata/dd3 $GLOBAL_ARGS --rpcport 22002 --port 21002 2>>qdata/logs/3.log &
+
+echo "[*] Starting node 4"
+PRIVATE_CONFIG=tm4.conf nohup geth --datadir qdata/dd4 $GLOBAL_ARGS --rpcport 22003 --port 21003 --voteaccount "0x9186eb3d20cbd1f5f992a950d808c4495153abd5" --votepassword "" 2>>qdata/logs/4.log &
+
+=> node4 --voteaccount "0x9186eb3d20cbd1f5f992a950d808c4495153abd5" --- это node4 1th account
+
+echo "[*] Starting node 5"
+PRIVATE_CONFIG=tm5.conf nohup geth --datadir qdata/dd5 $GLOBAL_ARGS --rpcport 22004 --port 21004 --voteaccount "0x0638e1574728b6d862dd5d3a3e0942c3be47d996" --votepassword "" 2>>qdata/logs/5.log &
+
+=> node5 --voteaccount "0x0638e1574728b6d862dd5d3a3e0942c3be47d996" --- это node5 1th account
+
+echo "[*] Starting node 6"
+PRIVATE_CONFIG=tm6.conf nohup geth --datadir qdata/dd6 $GLOBAL_ARGS --rpcport 22005 --port 21005 2>>qdata/logs/6.log &
+
+echo "[*] Starting node 7"
+PRIVATE_CONFIG=tm7.conf nohup geth --datadir qdata/dd7 $GLOBAL_ARGS --rpcport 22006 --port 21006 2>>qdata/logs/7.log &
+
 
 -----------------------------
 https://medium.com/taipei-ethereum-meetup/beginners-guide-to-ethereum-3-explain-the-genesis-file-and-use-it-to-customize-your-blockchain-552eb6265145
@@ -144,5 +174,47 @@ node2-7 tm2-7.conf otherNodeUrls = ["http://127.0.0.1:9000/"]
 вопрос можно ли их сделать больше 1й?
 
 ----------------------------------
+https://github.com/jpmorganchase/quorum/wiki/QuorumChain-Consensus
+Voting Smart Contract
+0x0000000000000000000000000000000000000020 в genesis.json
+0x0000000000000000000000000000000000000000000000000000000000000001 = 0x02 - 000...0 + 1 (index=1) = threshold voters
+"Nodes can also set the voteThreshold that must be met before a block will be accepted into the chain.
 
-storage в 
+Note: The current implementation does not dynamically update the voteThreshold when the number of Voter Nodes on the network changes, and also does not specifically track or limit the number of votes a Voter has made in a given Period. These items are on the Product Roadmap."
+
+0x0000000000000000000000000000000000000000000000000000000000000002 = 0x04 - 000...0 + 2 (index++) = len voters - но ?:%;№"! я не понимаю почему там стоит в примере 7nodes = 0x04 (по идее должно быть 0x03) - почему мои раскопки см ниже
+
+это исходный текст из примера 7nodes
+"0x29ecdbdf95c7f6ceec92d6150c697aa14abeb0f8595dd58d808842ea237d8494": "0x01",
+"0x6aa118c6537572d8b515a9f9154be55a3377a8de7991cd23bf6e5ceb368688e3": "0x01",
+"0x50793743212c6f01d326957d7069005b912f8215f10c7536be6b10782c6c44cd": "0x01",
+"0x38f6c908c5cc7ca668cec2f476abe61b4dbb1df20f0ad8e07ef5dbf6a2f1ffd4": "0x01",
+мой вариант
+"0x6aa118c6537572d8b515a9f9154be55a3377a8de7991cd23bf6e5ceb368688e3": "0x01",
+"0x50793743212c6f01d326957d7069005b912f8215f10c7536be6b10782c6c44cd": "0x01",
+"0x38f6c908c5cc7ca668cec2f476abe61b4dbb1df20f0ad8e07ef5dbf6a2f1ffd4": "0x01",
+или методом тыка
+"0x29ecdbdf95c7f6ceec92d6150c697aa14abeb0f8595dd58d808842ea237d8494": "0x01",
+"0x6aa118c6537572d8b515a9f9154be55a3377a8de7991cd23bf6e5ceb368688e3": "0x01",
+"0x50793743212c6f01d326957d7069005b912f8215f10c7536be6b10782c6c44cd": "0x01",
+"0x38f6c908c5cc7ca668cec2f476abe61b4dbb1df20f0ad8e07ef5dbf6a2f1ffd4": "0x01",
+в чем оказывается смысл - надо добавить account node1 к списку voters
+geth attach qdata/dd1/geth.ipc
+> eth.accounts
+["0xed9d02e382b34818e88b88a309c7fe71e65f419d"] и тогда из будет 4 и получится 4 значения
+"0x29ecdbdf95c7f6ceec92d6150c697aa14abeb0f8595dd58d808842ea237d8494": "0x01" - 
+часть1 := "000000000000000000000000" + 0xed9d02e382b34818e88b88a309c7fe71e65f419d
+часть2 := "0x000000000000000000000000000000000000000000000000000000000000000" + 3
+результат := sha3(часть1+часть2)
+и так для всех аккаунтов
+
+"0x0000000000000000000000000000000000000000000000000000000000000004": "0x02" - 000...0 + 4 (index++) = len mekers - опять таки это node1 + node2
+и по тому же алгоритму 
+"0xaca3b76ed4968740c3180dd7fa37f4aa229a2c758a848f53920e9ccb4c4bb74e": "0x01",
+"0xd188ba2dc293670542c1befaf7678b0859e5354a0727d1188b2afb6f47fe24d1": "0x01"
+
+"0xaca3b76ed4968740c3180dd7fa37f4aa229a2c758a848f53920e9ccb4c4bb74e": "0x01" -
+часть1 := "000000000000000000000000" + 0xed9d02e382b34818e88b88a309c7fe71e65f419d
+часть2 := "0x000000000000000000000000000000000000000000000000000000000000000" + 5
+результат := sha3(часть1+часть2)
+и так для всех аккаунтов
