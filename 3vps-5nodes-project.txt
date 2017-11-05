@@ -1,0 +1,71 @@
+Цель проекта: собрать стенд для отработки решений quorum и протестировать на них smart-contract
+
+Композиция:
+3xVPS
+VPS1: 141.105.65.227
+VPS2: 141.105.65.228
+VPS3: 141.105.65.229
+
+node per vps:
+VPS1:
+bootnode
+node11: role: deploy, blockmaker, voter
+node12: role: blockmaker, voter
+node13: role: voter
+node14: role: node
+node15: role: node
+
+VPS2:
+node21: role: deploy, blockmaker, voter
+node22: role: blockmaker, voter
+node23: role: voter
+node24: role: node
+node25: role: node
+
+VPS3:
+node31: role: deploy, blockmaker, voter
+node32: role: blockmaker, voter
+node33: role: voter
+node34: role: node
+node35: role: node
+
+------------
+1) подготавливаем весь проект в quorum1:~/workspace/quorum-maker/vps1-3 - нам нужны ключи нод, account, genesis.json
+2) на каждой vps создаем ~/workplace/3vps-5nodes-project-vps{1,2,3}
+3) создаем и запускаем init.sh на каждой vps
+4) создаем start.sh/stop.sh на каждой vps
+5) запускаем start.sh на каждой vps
+
+Итого:
+Наименование node{1-3}{1-5}   {1-3} = VPS 1..3, {1-5} - node in VPS
+
+node11 RPC: 141.105.65.227:22000
+node12 RPC: 141.105.65.227:22001
+node13 RPC: 141.105.65.227:22002
+node14 RPC: 141.105.65.227:22003
+node15 RPC: 141.105.65.227:22004
+
+node21 RPC: 141.105.65.228:22000
+node22 RPC: 141.105.65.228:22001
+node23 RPC: 141.105.65.228:22002
+node24 RPC: 141.105.65.228:22003
+node25 RPC: 141.105.65.228:22004
+
+node31 RPC: 141.105.65.229:22000
+node32 RPC: 141.105.65.229:22001
+node33 RPC: 141.105.65.229:22002
+node34 RPC: 141.105.65.229:22003
+node35 RPC: 141.105.65.229:22004
+
+Для private.set(4,{from:eth.coinbase,privateFor:["*******"]});
+формат nodexx:public key:*************
+node14:public:tS40GPLu8ov7HhcMR1kriM8SksDIgIJZ1ZhAwpOkO38=
+node15:public:BQJStXo+ZqJglZoHJu17XWM7YH02Mvd47wB4iqTslDA=
+node24:public:pfF8T5G2OZWigf/+K1Db6oSDgJuAe4kF+ku6rFymAw8=
+node25:public:fme/KlLAYM91sgag20v1RfG6M3SoDGTypUnbGkzG8WA=
+node34:public:9Pe2rpejxsunQ0KRAs1OQyTHKmzJbv1g+I3Q13G2o1A=
+node35:public:0PBLS3/iT9Rc5A+OESceH8g5gglzl3jyfcrc/m4Hxmo=
+
+comming soon:
+1) static-nodes.json = сейчас его нет
+2) несколько bootnode (не уверен)
