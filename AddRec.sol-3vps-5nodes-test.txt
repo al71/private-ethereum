@@ -68,6 +68,17 @@ truffle(node15)> AddRecord.deployed().then(function(instance) { return instance.
 { [String: '2'] s: 1, e: 0, c: [ 2 ] }
 truffle(node15)> 
 
+truffle(node15)> AddRecord.deployed().then(function(instance) { return instance.getRec(2);})
+[ '0x', '0x', '0x', { [String: '0'] s: 1, e: 0, c: [ 0 ] }, '0x' ]
+truffle(node15)> AddRecord.deployed().then(function(instance) { return instance.getRec(-1);})
+[ '0x', '0x', '0x', { [String: '0'] s: 1, e: 0, c: [ 0 ] }, '0x' ]
+truffle(node15)> AddRecord.deployed().then(function(instance) { return instance.getLastRec();})
+[ '0x6469676f7461746f727465737464620000000000000000000000000000000000',
+  '0x616e737765727300000000000000000000000000000000000000000000000000',
+  '0x4964000000000000000000000000000000000000000000000000000000000000',
+  { [String: '59'] s: 1, e: 1, c: [ 59 ] },
+  '0x7570646174650000000000000000000000000000000000000000000000000000' ]
+
 -----------
 root@wallet_lxc:/home/vs/BDCheckv2# cat migrations/3_deploy_contracts.js 
 var ConvertLib = artifacts.require("./ConvertLib.sol");
