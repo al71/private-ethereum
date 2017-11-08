@@ -1,0 +1,87 @@
+truffle(node11)> AddRecord.deployed().then(function(instance) { return instance.getCount();})
+{ [String: '0'] s: 1, e: 0, c: [ 0 ] }
+truffle(node11)> AddRecord.deployed().then(function(instance) { return instance.addRec("digotatortestdb","answers","Id",58,"update",{privateFor: ["BQJStXo+ZqJglZoHJu17XWM7YH02Mvd47wB4iqTslDA="]});})
+{ tx: '0x63a7f3aeedbcf4a0c9864118c31200f083968e0b82f5939c05fd039a683511c7',
+  receipt: 
+   { blockHash: '0xd9b83f64589fb317a00b180b8349acfa4342d723c0e5d0f2eb38ef3d7270932a',
+     blockNumber: 50062,
+     contractAddress: null,
+     cumulativeGasUsed: 154706,
+     from: '0x93623082dccd9fe905c2cd9f4264d3cc040ebac6',
+     gasUsed: 0,
+     logs: [ [Object] ],
+     logsBloom: '0x00000000000000000000000000400000000000000000000000000000000000010000000000000000000000040000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010',
+     root: '0xbac2c5e1cf858640988864df731b5f2fd764211706e93fa7e233af270183c116',
+     to: '0x988bc86cdbe207f2c125f61b199beb584525e62f',
+     transactionHash: '0x63a7f3aeedbcf4a0c9864118c31200f083968e0b82f5939c05fd039a683511c7',
+     transactionIndex: 3 },
+  logs: 
+   [ { address: '0x988bc86cdbe207f2c125f61b199beb584525e62f',
+       blockNumber: 50062,
+       transactionIndex: 3,
+       transactionHash: '0x63a7f3aeedbcf4a0c9864118c31200f083968e0b82f5939c05fd039a683511c7',
+       blockHash: '0xd9b83f64589fb317a00b180b8349acfa4342d723c0e5d0f2eb38ef3d7270932a',
+       logIndex: 0,
+       event: 'AddRec',
+       args: [Object] } ] }
+truffle(node11)> AddRecord.deployed().then(function(instance) { return instance.getCount();})
+{ [String: '1'] s: 1, e: 0, c: [ 1 ] }
+truffle(node11)> AddRecord.deployed().then(function(instance) { return instance.addRec("digotatortestdb","answers","Id",59,"update",{privateFor: ["BQJStXo+ZqJglZoHJu17XWM7YH02Mvd47wB4iqTslDA="]});})
+{ tx: '0xa02afda5c04ff94e1c4dbaba21b6ecf9399058ee8f82fe73e751d126e956c2f1',
+  receipt: 
+   { blockHash: '0xaf46ee85b352c5924fc3302f676f904b021084e0e1a2624cf0ea1d83791bcf59',
+     blockNumber: 50067,
+     contractAddress: null,
+     cumulativeGasUsed: 154706,
+     from: '0x93623082dccd9fe905c2cd9f4264d3cc040ebac6',
+     gasUsed: 0,
+     logs: [ [Object] ],
+     logsBloom: '0x00000000000000000000000000400000000000000000000000000000000000010000000000000000000000040000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010',
+     root: '0x497c226294ae9a5dbdcd720e01c6c5aaa07fd06aee910cb783f8a4f822cc5a94',
+     to: '0x988bc86cdbe207f2c125f61b199beb584525e62f',
+     transactionHash: '0xa02afda5c04ff94e1c4dbaba21b6ecf9399058ee8f82fe73e751d126e956c2f1',
+     transactionIndex: 3 },
+  logs: 
+   [ { address: '0x988bc86cdbe207f2c125f61b199beb584525e62f',
+       blockNumber: 50067,
+       transactionIndex: 3,
+       transactionHash: '0xa02afda5c04ff94e1c4dbaba21b6ecf9399058ee8f82fe73e751d126e956c2f1',
+       blockHash: '0xaf46ee85b352c5924fc3302f676f904b021084e0e1a2624cf0ea1d83791bcf59',
+       logIndex: 0,
+       event: 'AddRec',
+       args: [Object] } ] }
+-----------
+root@wallet_lxc:/home/vs/BDCheckv2# truffle console --network node21
+truffle(node21)> AddRecord.deployed().then(function(instance) { return instance.getCount();})
+{ [String: '0'] s: 1, e: 0, c: [ 0 ] }
+truffle(node21)> .exit
+root@wallet_lxc:/home/vs/BDCheckv2# truffle console --network node31
+truffle(node31)> AddRecord.deployed().then(function(instance) { return instance.getCount();})
+{ [String: '0'] s: 1, e: 0, c: [ 0 ] }
+truffle(node31)> .exit
+root@wallet_lxc:/home/vs/BDCheckv2# truffle console --network node14
+truffle(node14)> AddRecord.deployed().then(function(instance) { return instance.getCount();})
+{ [String: '0'] s: 1, e: 0, c: [ 0 ] }
+truffle(node14)> .exit
+root@wallet_lxc:/home/vs/BDCheckv2# truffle console --network node15
+truffle(node15)> AddRecord.deployed().then(function(instance) { return instance.getCount();})
+{ [String: '2'] s: 1, e: 0, c: [ 2 ] }
+truffle(node15)> 
+
+-----------
+root@wallet_lxc:/home/vs/BDCheckv2# cat migrations/3_deploy_contracts.js 
+var ConvertLib = artifacts.require("./ConvertLib.sol");
+var MetaCoin = artifacts.require("./MetaCoin.sol");
+var AddRecord = artifacts.require("./AddRecord.sol");
+
+
+module.exports = function(deployer) {
+  deployer.deploy(ConvertLib);
+  deployer.link(ConvertLib, MetaCoin);
+  deployer.deploy(MetaCoin);
+  deployer.deploy(AddRecord,{privateFor: ["BQJStXo+ZqJglZoHJu17XWM7YH02Mvd47wB4iqTslDA="]});
+};
+
+------------
+
+
