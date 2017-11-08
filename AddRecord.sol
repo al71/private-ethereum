@@ -1,4 +1,4 @@
-pragma solidity ^0.4.6;
+pragma solidity ^0.4.8;
 
 contract AddRecord {
 
@@ -6,8 +6,8 @@ contract AddRecord {
 
 
  function() payable {
-        if (msg.value > 0)
-            Deposit(msg.sender, msg.value);
+   if (msg.value > 0)
+     Deposit(msg.sender, msg.value);
 
  }
 
@@ -40,4 +40,25 @@ contract AddRecord {
     return records.length;
  }
     
+ function getLastRec() constant returns(bytes32 _db_name, bytes32 _table_name, bytes32 _db_key_name, uint _db_key_value, bytes32 _db_op_type) {
+        if(records.length < 1) throw;
+        _db_name = records[records.length-1].db_name;
+        _table_name = records[records.length-1].table_name;
+        _db_key_name = records[records.length-1].db_key_name;
+        _db_key_value = records[records.length-1].db_key_value;
+        _db_op_type = records[records.length-1].db_op_type;
+ }
+
+ function getRec(uint index) constant returns(bytes32 _db_name, bytes32 _table_name, bytes32 _db_key_name, uint _db_key_value, bytes32 _db_op_type) {
+        if(records.length < 1 || index > records.length) throw;
+        _db_name = records[index].db_name;  
+        _table_name = records[index].table_name;  
+        _db_key_name = records[index].db_key_name;
+        _db_key_value = records[index].db_key_value;
+        _db_op_type = records[index].db_op_type;
+ }
+
+ function kill(address _to) {
+    suicide(_to);
+ }
 }
