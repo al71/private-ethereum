@@ -5,9 +5,5 @@ module.exports = {
       host: "141.105.65.234",
       port: 8545  // Different than the default below
     }
-  },
-  rpc: {
-    host: "localhost",
-    port: 8545
   }
 };
