@@ -1,9 +1,10 @@
 module.exports = {
   networks: {
-    "testnet": {
-      network_id: 3,
+    development: {
       host: "141.105.65.234",
-      port: 8545  // Different than the default below
+      port: 8545,
+      network_id: "*",
+      gas: 4600000
     }
   }
 };
